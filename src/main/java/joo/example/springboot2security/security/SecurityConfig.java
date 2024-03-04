@@ -4,9 +4,8 @@ import joo.example.springboot2security.dto.MemberPrincipal;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,15 +21,20 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth.requestMatchers(
                                 PathRequest.toStaticResources().atCommonLocations())
                         .permitAll()
+                        .mvcMatchers("api/v1/signin")
+                        .permitAll()
                         .anyRequest()
                         .authenticated())
-                .formLogin(Customizer.withDefaults())
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .formLogin(form -> form.loginPage("/signin").permitAll())
                 .build();
     }
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> MemberPrincipal.of(1L, "admin", "{noop}admin", "admin");
+        return username -> MemberPrincipal.of(1L, "admin@gmail.com", "{noop}admin", "admin");
     }
 
     @Bean
