@@ -4,6 +4,5 @@ spring:
       suffix: .html
 jwt:
   token:
-    cookie-name: "token"
     secret-key: "aaaaagaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" # >= 256bits
     access-expired-ms: 31540000000 # 24 * 3600000 = 24 hours

@@ -10,12 +10,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.session.SessionManagementFilter;
 
 @Configuration
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtTokenFilter jwtTokenFilter) throws Exception {
         return http.csrf()
                 .disable()
                 .authorizeHttpRequests(auth -> auth.requestMatchers(
@@ -29,6 +30,7 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .formLogin(form -> form.loginPage("/signin").permitAll())
+                .addFilterAfter(jwtTokenFilter, SessionManagementFilter.class)
                 .build();
     }
 
