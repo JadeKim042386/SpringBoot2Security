@@ -11,5 +11,4 @@ public class SpringBoot2SecurityApplication {
     public static void main(String[] args) {
         SpringApplication.run(SpringBoot2SecurityApplication.class, args);
     }
-
 }

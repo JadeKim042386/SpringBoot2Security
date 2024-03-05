@@ -1,10 +1,9 @@
 package joo.example.springboot2security.security;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.AeadAlgorithm;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.RequiredTypeException;
 import io.jsonwebtoken.security.Keys;
 import joo.example.springboot2security.dto.JwtProperties;
 import joo.example.springboot2security.dto.MemberPrincipal;
@@ -16,8 +15,10 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -42,7 +43,6 @@ public class TokenProvider {
                 .signWith(getKey(jwtProperties.secretKey()))
                 .compact();
     }
-
 
     /**
      * 토큰을 파싱하는 과정에서 validation도 같이 진행됨 (empty, expired 등)
@@ -85,7 +85,8 @@ public class TokenProvider {
                 .map(this::parseSpecification)
                 .orElse(new String[] {null, ANONYMOUS, ANONYMOUS, ANONYMOUS});
 
-        return MemberPrincipal.of(Long.parseLong(parsed[0]), parsed[1], parsed[2], parsed[3]); //id, email, nickname, authority
+        return MemberPrincipal.of(
+                Long.parseLong(parsed[0]), parsed[1], parsed[2], parsed[3]); // id, email, nickname, authority
     }
 
     private SecretKey getKey(String key) {

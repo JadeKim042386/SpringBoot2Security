@@ -8,20 +8,11 @@ import java.util.Collection;
 import java.util.Set;
 
 public record MemberPrincipal(
-        Long id,
-        String username,
-        String password,
-        String nickname,
-        Collection<? extends GrantedAuthority> authorities)
+        Long id, String username, String password, String nickname, Collection<? extends GrantedAuthority> authorities)
         implements UserDetails {
 
     public static MemberPrincipal of(Long id, String username, String password, String nickname) {
-        return new MemberPrincipal(
-                id,
-                username,
-                password,
-                nickname,
-                Set.of(new SimpleGrantedAuthority("USER")));
+        return new MemberPrincipal(id, username, password, nickname, Set.of(new SimpleGrantedAuthority("USER")));
     }
 
     @Override

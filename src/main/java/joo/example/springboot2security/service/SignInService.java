@@ -12,12 +12,11 @@ public class SignInService {
     private final TokenProvider tokenProvider;
 
     public String signIn(String email, String password) {
-        //비밀번호 일치 확인
+        // 비밀번호 일치 확인
         if (!password.equals("admin")) {
             throw new AuthException(ErrorCode.INVALID_PASSWORD);
         }
-        //AccessToken 발급
-        return tokenProvider.generateAccessToken(
-                email, "admin", String.format("%s:%s", 1, "ADMIN"));
+        // AccessToken 발급
+        return tokenProvider.generateAccessToken(email, "admin", String.format("%s:%s", 1, "ADMIN"));
     }
 }
