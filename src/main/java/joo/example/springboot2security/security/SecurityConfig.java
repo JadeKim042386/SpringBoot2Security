@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .formLogin(form -> form.loginPage("/signin").permitAll())
+                .formLogin(form -> form.loginPage("/login.html").permitAll())
                 .addFilterAfter(jwtTokenFilter, SessionManagementFilter.class)
                 .build();
     }
